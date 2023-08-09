@@ -1,0 +1,378 @@
+import { useState } from "react";
+import { SafeAreaView, ScrollView, View,TextInput,Text,StyleSheet,Button,Image } from "react-native";
+import { Stack, useRouter } from "expo-router";
+import Icon from 'react-native-vector-icons/FontAwesome';
+import { COLORS, icons, images, SIZES } from "../constants";
+import {
+  ScreenHeaderBtn,
+  Welcome
+} from "../components";
+import RecenltyShipped from "../components/home/RecentlyShipped/RecentlyShipped";
+import NewOrderComponent from '../components/home/NewOrder/NewOrder'
+import Appbar from '../components/home/AppBar/Appbar'
+import { TouchableOpacity } from "react-native-gesture-handler";
+const Home = ({ navigation }) => {
+  const handlePressNotofication = ()=>
+  {
+    navigation.push('notification')
+  };
+  const isvalid =true;
+  const [searchTerm, setSearchTerm] = useState("");
+  const packageData = [
+    {
+      id: 1,
+      title: 'Package 1',
+      courierProvider: 'FedEx',
+      startingPoint: 'KHI',
+      endingPoint: 'ISB',
+      parcelDate: '2023-08-01',
+      ID: 'ABC123',
+      dimensions: '10 x 15 x 8 cm',
+      description: 'Package 1 details here...',
+      logo: icons.openbox // Replace with the path to FedEx logo image
+    },
+    {
+      id: 2,
+      title: 'Package 2',
+      courierProvider: 'DHL',
+      startingPoint: 'LHR',
+      endingPoint: 'NYC',
+      parcelDate: '2023-07-30',
+      ID: 'XYZ789',
+      dimensions: '20 x 30 x 25 cm',
+      description: 'Package 2 details here...',
+      logo:icons.envelop, // Replace with the path to DHL logo image
+    },
+    {
+      id: 3,
+      title: 'Package 3',
+      courierProvider: 'DHL',
+      startingPoint: 'LHR',
+      endingPoint: 'NYC',
+      parcelDate: '2023-07-30',
+      ID: 'XYZ789',
+      dimensions: '20 x 30 x 25 cm',
+      description: 'Package 2 details here...',
+      logo:icons.Pallet, // Replace with the path to DHL logo image
+    },
+    {
+      id: 4,
+      title: 'Package 4',
+      courierProvider: 'DHL',
+      startingPoint: 'LHR',
+      endingPoint: 'NYC',
+      parcelDate: '2023-07-30',
+      ID: 'XYZ789',
+      dimensions: '20 x 30 x 25 cm',
+      description: 'Package 2 details here...',
+      logo:'../../../assets/icons/amazon.png', // Replace with the path to DHL logo image
+    },
+    {
+      id: 5,
+      title: 'Package 5',
+      courierProvider: 'DHL',
+      startingPoint: 'LHR',
+      endingPoint: 'NYC',
+      parcelDate: '2023-07-30',
+      ID: 'XYZ789',
+      dimensions: '20 x 30 x 25 cm',
+      description: 'Package 2 details here...',
+      logo:'../../../assets/icons/envelop.png', // Replace with the path to DHL logo image
+    },
+    {
+      id: 6,
+      title: 'Package 6',
+      courierProvider: 'DHL',
+      startingPoint: 'LHR',
+      endingPoint: 'NYC',
+      parcelDate: '2023-07-30',
+      ID: 'XYZ789',
+      dimensions: '20 x 30 x 25 cm',
+      description: 'Package 2 details here...',
+      logo:'../../../assets/icons/amazon.png', // Replace with the path to DHL logo image
+    },
+    // Add more package data as needed
+  ];
+  const [filteredPackageData, setFilteredPackageData] = useState(packageData);
+  const handleSearch = () => {
+    const filteredPackages = packageData.filter((packageItem) =>
+      packageItem.title.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    setFilteredPackageData(filteredPackages);
+  };
+  const handleImageClick = ()=>
+  {
+    console.log("helo");
+  }
+  return (
+    
+    <SafeAreaView style={{ flex: 1, backgroundColor: "#F94949" }}>
+      <ScrollView showsVerticalScrollIndicator={false}>
+       <View style={styles.container}>
+        <Text style={styles.userName}>Order History</Text>
+        <Text style={styles.welcomeMessage}>Find All the Other Information about orders</Text>
+        </View>
+        <View style={styles.searchContainer}>
+        <View style={styles.searchWrapper}>
+          <TextInput
+            style={styles.searchInput}
+            value={searchTerm}
+            onChangeText={(text) => setSearchTerm(text)}
+            placeholder='Enter Tracking Number'
+          />
+          
+        </View>
+
+        <TouchableOpacity activeOpacity={1} style={styles.searchBtn} onPress={handleSearch}>
+          <Text style={{color:"white"}} >
+            Search
+          </Text>
+        </TouchableOpacity>
+        
+      </View>
+        {filteredPackageData.map((packageItem) => (
+          <TouchableOpacity
+          activeOpacity={1}
+            key={packageItem.id}
+            style={styles.card}
+            onPress={() => handleImageClick(packageItem.title)}
+          >
+            {/* Upper Left: Courier Logo and Package Title */}
+            <View style={styles.upperLeft}>
+              <Image source={packageItem.logo} style={styles.courierLogo} />
+              <Text style={styles.cardTitle}>{packageItem.title}</Text>
+              <Text style={styles.courierName}>{packageItem.courierProvider}</Text>
+              <Text style={styles.dimensions}>{packageItem.dimensions}</Text>
+            </View>
+
+            {/* Upper Right: Parcel Status */}
+            <View style={styles.upperRight}>
+              <Text style={styles.parcelStatus}>Parcel Status</Text>
+              {/* Add status information here */}
+            </View>
+
+            {/* Bottom Left: Starting and Ending Point */}
+            <View style={styles.bottomLeft}>
+              <Text style={styles.pointText}>{packageItem.startingPoint}</Text>
+              <Text style={styles.pointText}>{packageItem.endingPoint}</Text>
+            </View>
+
+            {/* Bottom Right: Parcel Date and ID */}
+            <View style={styles.bottomRight}>
+              <Text style={styles.parcelDate}>{packageItem.parcelDate}</Text>
+              <Text style={styles.parcelId}>ID: {packageItem.ID}</Text>
+            </View>
+
+            <Image source={icons.rightarrow} style={styles.arrowIcon} />
+          </TouchableOpacity>
+        ))}
+        
+         
+      </ScrollView>
+      
+    <Appbar navigation={navigation}/> 
+    </SafeAreaView>
+  );
+};
+const styles = StyleSheet.create({
+    container: {
+        width: "80%",
+        margin:20
+      },
+      container1: {
+    
+        height:170,
+        width: "92%",
+        margin:20,
+        backgroundColor:COLORS.lightWhite,
+        borderRadius:15,
+        
+      },
+      userName: {
+        fontSize: 27, // You can adjust the font size as needed
+        fontWeight: 'bold',
+        color: COLORS.lightWhite,
+      },
+      welcomeMessage: {
+       
+        fontSize: SIZES.xsmall,
+        color: COLORS.lightWhite,
+        marginTop: 2,
+      },
+      buttoncontainer:{
+        flexDirection:"row",
+        
+        justifyContent:'space-evenly',
+      },
+      buttonselected: {
+        backgroundColor: 'black',
+        zIndex: 10,
+        marginTop: -10,
+        height: 45,
+        width: 160,
+        borderRadius: 15,
+        borderColor: 'white',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+      },
+      unbuttonselected: {
+        backgroundColor: 'white',
+        zIndex: 10,
+        marginTop: -10,
+        height: 45,
+        width: 160,
+        borderRadius: 15,
+        borderColor: 'black',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderColor: 'black', // Add this line to set the border color to black
+    borderWidth: 1,
+      },
+      pointone:{
+        marginLeft:30,
+        marginTop:10,
+        flexDirection:"column",
+         width:30,
+         height:100
+      },
+      image: {
+        width: 25,
+        height: 25,
+      },
+      image1: {
+        width: 20,
+        height: 20,
+        marginLeft:-25,
+        marginTop:5
+      },
+      searchContainer: {
+        justifyContent: "center",
+        flexDirection:"column",
+        marginTop: SIZES.small,
+        height: 50,
+        paddingTop:10
+      },
+      searchWrapper: {
+        marginRight: SIZES.small,
+        marginTop:10,
+        borderRadius: SIZES.medium,
+        height: "80%",
+        borderWidth:2,
+        width:250,
+        flexDirection:"row"
+      },
+      searchInput: {
+       
+        width: "50%",
+        height: "100%",
+        paddingHorizontal: SIZES.medium,
+      }
+      ,card: {
+        backgroundColor: COLORS.white,
+        width: 350,
+        height: 200,
+        borderRadius: 10,
+        padding: 10,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        margin:20
+      },
+      upperLeft: {
+        alignItems: 'flex-start',
+        justifyContent: 'flex-start',
+      },
+      upperRight: {
+        alignItems: 'flex-start',
+        justifyContent: 'flex-start',
+      },
+      bottomLeft: {
+        alignItems: 'flex-start',
+        justifyContent: 'flex-end',
+      },
+      bottomRight: {
+        alignItems: 'flex-end',
+        justifyContent: 'flex-end',
+      },
+      cardTitle: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        marginBottom: 5,
+      },
+      courierName: {
+        fontSize: 14,
+        color: COLORS.lightGray,
+      },
+      dimensions: {
+        fontSize: 12,
+        color: COLORS.lightGray,
+      },
+      courierLogo: {
+        width: 40,
+        height: 40,
+        resizeMode: 'contain',
+      },
+      parcelStatus: {
+        fontSize: 14,
+        fontWeight: 'bold',
+      },
+      pointText: {
+        fontSize: 12,
+        color: COLORS.lightGray,
+      },
+      parcelDate: {
+        fontSize: 12,
+        color: COLORS.lightGray,
+      },
+      parcelId: {
+        fontSize: 12,
+        color: COLORS.lightGray,
+      },
+      arrowIcon: {
+        width: 20,
+        height: 20,
+        tintColor: COLORS.lightGray,
+      },
+      searchInput2:{
+           backgroundColor:COLORS.lightWhite,
+           borderRadius :38,
+           paddingLeft:10,
+           width:150,
+           margin:10
+      },
+      searchContainer: {
+        justifyContent: "center",
+        alignItems: "center",
+        flexDirection: "row",
+        marginTop: SIZES.small,
+        height: 50,
+      },
+      searchWrapper: {
+        flex: 1,
+        backgroundColor: COLORS.white,
+        marginRight: SIZES.small,
+        justifyContent: "center",
+        alignItems: "center",
+        borderRadius: SIZES.medium,
+        height: "80%",
+      },
+      searchInput: {
+       
+        width: "100%",
+        height: "100%",
+        paddingHorizontal: SIZES.medium,
+      },
+      searchBtn: {
+        width: 80,
+        height: "80%",
+        backgroundColor:"black",
+        borderRadius: SIZES.large,
+        justifyContent: "center",
+        alignItems: "center",
+        marginLeft: -40
+      }
+      
+})
+export default Home;
